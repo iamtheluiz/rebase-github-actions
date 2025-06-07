@@ -1,24 +1,38 @@
-name: CI
+name: Notificar Discord ao Criar Issue ou Discussão
 
 # Define em quais situações esse workflow será executado
 on:
   issues:
     types:
       - opened
+  discussion:
+    types:
+      - created
 
 # Os jobs são conjuntos de actions que são executados na mesma máquina virtual.
 # É possível ter mais de um job e assim executar ações paralelamente.
 jobs:
-  discord_notification_on_issue:
+  discord_notification_on_issue_or_discussion:
     runs-on: ubuntu-latest
     steps:
-      - name: Notify Discord on Issue Created
+      - name: Notify Discord on Issue or Discussion
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
-          AUTHOR="${{ github.event.issue.user.login }}"
-          ISSUE_TITLE="${{ github.event.issue.title }}"
-          ISSUE_URL="${{ github.event.issue.html_url }}"
+          if [ "${{ github.event_name }}" == "issues" ]; then
+            AUTHOR="${{ github.event.issue.user.login }}"
+            TITLE="${{ github.event.issue.title }}"
+            URL="${{ github.event.issue.html_url }}"
+            TYPE="Issue"
+            ICON="📋"
+          else
+            AUTHOR="${{ github.event.discussion.user.login }}"
+            TITLE="${{ github.event.discussion.title }}"
+            URL="${{ github.event.discussion.html_url }}"
+            TYPE="Discussão"
+            ICON="💬"
+          fi
+          
           curl -X POST -H "Content-Type: application/json" \
-          -d "{\"content\": \"📋 **Issue Criada com Sucesso 📋**\\n- Autor: $AUTHOR\\n- Título: $ISSUE_TITLE\\n- Link: $ISSUE_URL\"}" \
+          -d "{\"content\": \"$ICON **$TYPE Criado com Sucesso $ICON**\\n- Autor: $AUTHOR\\n- Título: $TITLE\\n- Link: $URL\"}" \
           $DISCORD_WEBHOOK_URL
