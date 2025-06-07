@@ -1,0 +1,2 @@
+- Fix rebase notification
+- Update readme
