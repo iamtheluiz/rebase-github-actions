@@ -34,5 +34,5 @@ jobs:
           fi
           
           curl -X POST -H "Content-Type: application/json" \
-          -d "{\"content\": \"$ICON **$TYPE Criado com Sucesso $ICON**\\n- Autor: $AUTHOR\\n- Título: $TITLE\\n- Link: $URL\"}" \
+          -d "{\"content\": \"$ICON **$TYPE Criada com Sucesso $ICON**\\n- Autor: $AUTHOR\\n- Título: $TITLE\\n- Link: $URL\"}" \
           $DISCORD_WEBHOOK_URL
