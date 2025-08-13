@@ -1,14 +1,11 @@
 name: CI
 
-# Define em quais situações esse workflow será executado
 on:
   push:
     branches: [ main, development ]
   pull_request:
     branches: [ main, development ]
 
-# Os jobs são conjuntos de actions que são executados na mesma máquina virtual.
-# É possível ter mais de um job e assim executar ações paralelamente.
 jobs:
   discord_notification_on_pr:
     runs-on: ubuntu-latest
